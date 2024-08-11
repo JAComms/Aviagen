@@ -1,0 +1,61 @@
+#########################################################################
+#
+# ESP32-C6 16Mb Boards - Settings and Sensors
+#
+
+esp32:
+  board: esp32-c6-devkitc-1
+  flash_size: 16MB
+  variant: esp32c6
+  framework:
+    type: esp-idf
+    version: "5.2.1"
+    platform_version: 6.6.0
+    sdkconfig_options:
+      CONFIG_OPENTHREAD_ENABLED: n
+      CONFIG_ENABLE_WIFI_STATION: y
+      CONFIG_USE_MINIMAL_MDNS: y
+      CONFIG_ESPTOOLPY_FLASHSIZE_16MB: y
+      CONFIG_ZB_ENABLED: y
+      CONFIG_ZB_ZED: y
+      CONFIG_ZB_RADIO_NATIVE: y
+
+#########################################################################
+
+# fix for logger from luar123 (thanks!)
+external_components:
+    - source: github://luar123/esphome@fix_logger
+      components: [ logger ]
+      refresh: never
+
+#########################################################################
+
+sensor:
+
+   # ESP32 Internal Temperature
+  - platform: internal_temperature
+    name: "Device Temperature"
+
+#########################################################################
+#
+# Configure the onboard RGB LED of the ESP32-C6 board
+#
+
+light:
+  - platform: neopixelbus
+    type: GRB
+    variant: WS2812x
+    pin: 48          # CHECK PIN NUMBER
+    num_leds: 1
+    name: "Onboard RGB LED"
+    id: onboard_led
+    effects:
+      - strobe:
+      - addressable_rainbow:
+      - addressable_scan:
+      - addressable_twinkle:
+      - addressable_random_twinkle:
+      - addressable_fireworks:
+      - addressable_flicker:
+
+#########################################################################

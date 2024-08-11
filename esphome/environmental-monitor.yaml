@@ -1,0 +1,81 @@
+#########################################################################
+#
+# Environmental monitoring using ESP32-S3 chipset and BME280 sensor(s)
+# for temperature, humidity, pressure & dew point.
+#
+
+   # Provides substitutions or variables that are then called elsewhere multiple times in the config
+substitutions:
+   # Default name  
+  name: "environmental-monitor"
+   # Default friendly name 
+  friendly_name: "Environmental Monitor"
+   # Description as appears in ESPHome & top of webserver page
+  device_description: "DIY - Environmental Monitor (Temp./Humidity/Pressure)"
+   # Allows ESP device to be automatically lined to an 'Area' in Home Assistant. Typically used for areas such as 'Lounge Room', 'Kitchen' etc    
+  location: ""  
+   # The phase in the home power supply, upon which this plug is utilsed. 1p = A. 3p = A, B or C.  (myHome GPO 1 = Phase C, GPO 2 = Phase A, GPO 3 = Phase B)
+  power_circuit: "TBC"  
+   # Project Name
+  project_name: "DIY.Environmental Monitor"
+   # Project version denotes the release version of the yaml file, allowing checking of deployed vs latest version  
+  project_version: "1.1.0"
+
+   # If true, entity should not be added to Home Assistant frontend, without the user manually enabling it.
+  disable_by_default: "false"
+
+   # I2C PINS - Used for BME280 sensor Bus A
+  bus_a_sda_pin: "GPIO20"      # Default on ESP32 is SDA = PIN 21. ES32-S3 (ESP-WROOM-32D) use 20
+  bus_a_scl_pin: "GPIO21"      # Default on ESP32 is SLC = PIN 22. ES32-S3 (ESP-WROOM-32D) use 21
+  bus_a_frequency: "100kHz"    # Optional: 100kHz
+
+   # I2C PINS - Used for BME280 sensor Bus B
+  bus_b_sda_pin: "GPIO14"      # Default on ESP32 is SDA = PIN14 ??. ES32-S3 (ESP-WROOM-32D) use ??
+  bus_b_scl_pin: "GPIO15"      # Default on ESP32 is SLC = PIN15 ??. ES32-S3 (ESP-WROOM-32D) use ??  
+  bus_b_frequency: "100kHz"    # Optional: 100kHz
+
+   # BME 280 / BME680 Sensor
+   #
+   # Location of BME280/680 Sensor #1. Used to prefix sensor if there are two. Leave empty if only 1. Add a " - " to the end of each entry if used.
+  bme_sensor1_location: ""
+   # Location of BME280/680 Sensor #2. Used to prefix sensor if there are two. Leave empty if only 1. Add a " - " to the end of each entry if used.
+  bme_sensor2_location: ""
+   # Calibrate the outpute of the temperature sensor(s).
+  temperature_1_offset: "0.0"
+  temperature_2_offset: "0.0"
+   # Calibrate the outpute of the pressure sensor(s).
+  pressure_1_offset: "0.0"
+  pressure_2_offset: "0.0"
+   # Calibrate the outpute of the humidity sensor(s).
+  humidity_1_offset: "0.0"
+  humidity_2_offset: "0.0"
+
+
+########################## End of Substitutions #########################
+#
+# Defines the type of ESP chip used on the device. 
+# Must be in the local devices configuration file.
+#
+
+#esp32:
+#  board: esp32-s3-devkitc-1
+#  framework:
+#    type: arduino
+
+#########################################################################
+#
+# Remote Packages to be utilised
+#
+
+dashboard_import:
+  package_import_url: github://roving-ronin/aviagen/esphome/environmental-monitor.yaml@main
+  import_full_config: false
+
+packages:
+  base-config:      !include common/base-configuration.yaml
+  wifi-config:      !include common/network-wifi.yaml
+  bme280a-sensors:  !include sensors/bme280-bus-a.yaml
+# bme280b-sensors:  !include sensors/bme280-bus-b.yaml
+
+
+#########################################################################
