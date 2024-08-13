@@ -148,7 +148,7 @@ sensor:
     unit_of_measurement: '%'
     update_interval: 1s #the delta filter will ensure it only sends values when something changes.     
     lambda: |-
-        return id(tank_level).state / id(tank_height).state * 100;
+        return id(tank_level).state / id(tank_height) * 100;
     # divide by max water level height to get a percentage. Inlet height 2410mm / tank height 2485mm. Diameter 2380mm. 10,000L
     # H 2410mm x D 2380mm = 10,721.6305 L (Full).   2410mm = 23.56kPa / .24bar / 3.42psi / 176.75 mmHg
     # local gravity = 9.79697g ms2.  1,000L = 979.697kg
