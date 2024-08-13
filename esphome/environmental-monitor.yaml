@@ -68,7 +68,7 @@ substitutions:
 #
 
 dashboard_import:
-  package_import_url: github://roving-ronin/aviagen/esphome/environmental-monitor.yaml@main
+  package_import_url: github://JAcomms/aviagen/esphome/environmental-monitor.yaml@main
   import_full_config: false
 
 packages:
