@@ -102,7 +102,7 @@ esphome:
 #
 packages:
   remote_package:
-    url: https://github.com/Roving-Ronin/aviagen/
+    url: https://github.com/JAComms/aviagen/
     ref: main 
     files: [esphome/decontamination-station.yaml]
     refresh: 5s # optional
