@@ -5,7 +5,7 @@
 substitutions:
    
    # Enable logs to DEBUG and determine the ds18b20 address and paste below
-  ds18b20_address: ""
+  ds18b20_address: "0xdb0b2373c5927228"
 
    # ds18b20 Sensor
    # Location of ds18b20 Sensor. Used to prefix sensor if there are two. Leave empty if only 1. Add a " - " to the end of each entry if used.
