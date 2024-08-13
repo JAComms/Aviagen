@@ -98,7 +98,7 @@ sensor:
     icon: 'mdi:water-well'
     unit_of_measurement: 'cm'
     lambda: |-
-        return id(water_tank_voltage).state;
+        return id(tank_voltage).state;
     update_interval: 1s #the delta filter will ensure it only sends values when something changes. 
     filters:
       - calibrate_linear:
