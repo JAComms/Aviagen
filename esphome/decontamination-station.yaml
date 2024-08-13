@@ -65,6 +65,7 @@ packages:
   base-config:            !include common/base-configuration.yaml
   network-config:         !include common/network-ethernet-w5500.yaml
   bme280a-sensors:        !include sensors/bme280-bus-a.yaml
+  ds18b20-sensors:        !include sensors/ds18b20-1wire.yaml
   water-tank-sensors:     !include sensors/cylinder-liquid-pressure-tl136.yaml
   kincony-esp32-s3-core:  !include boards/kincony-esp32-s3-core.yaml
 
