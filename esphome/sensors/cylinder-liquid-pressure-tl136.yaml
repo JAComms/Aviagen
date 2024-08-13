@@ -107,7 +107,7 @@ sensor:
     update_interval: 1s #the delta filter will ensure it only sends values when something changes. 
     filters:
       - calibrate_linear:
-          # Measured value of X volt maps to Y cm
+          # Measured value of X volt maps to Y cm. 241.0 (and preceding numbers) are based upon a inlet height of 241cm. i.e. 120.5 = 50% of that etc
           - 4.01667 -> 241.0   # 100%
           - 3.61500 -> 216.9   #  90%
           - 3.21333 -> 192.8   #  80%
