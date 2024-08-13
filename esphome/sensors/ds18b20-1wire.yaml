@@ -34,7 +34,7 @@ sensor:
     address: ${ds18b20_address}
     accuracy_decimals: 1
     filters:
-      offset: ${ds18b20_temperature_offset_offset}
+      offset: ${ds18b20_temperature_offset}
     icon: "mdi:temperature-celsius"
     update_interval: 120s
 
