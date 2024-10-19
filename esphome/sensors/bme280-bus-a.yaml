@@ -20,6 +20,20 @@ substitutions:
   
 ########################## End of Substitutions #########################
 #
+# Combined with web_server settings in /common/base-configuration to
+# define a network information group
+#
+
+web_server:
+  version: 3
+  sorting_groups:
+    - id: group_environmental_sensors
+      name: "Environmental Sensors"
+      sorting_weight: -45  
+
+
+#########################################################################
+#
 # Configure the i2c bus, to find and operate the BME280 sensor
 #
 
@@ -51,7 +65,9 @@ sensor:
       filters:
         offset: ${temperature_1_offset}
       icon: mdi:temperature-celsius
-      web_server_sorting_weight: 4
+      web_server:
+        sorting_group_id: group_environmental_sensors
+        sorting_weight: 1
 
      # Relative humidity %
     humidity:
@@ -61,7 +77,9 @@ sensor:
       filters:
         offset: ${humidity_1_offset}
       icon: mdi:water-percent
-      web_server_sorting_weight: 5
+      web_server:
+        sorting_group_id: group_environmental_sensors
+        sorting_weight: 2
 
      # Pressure in hPa
     pressure:
@@ -71,7 +89,9 @@ sensor:
       filters:
         offset: ${pressure_1_offset}
       icon: mdi:gauge
-      web_server_sorting_weight: 8
+      web_server:
+        sorting_group_id: group_environmental_sensors
+        sorting_weight: 5
     
    # Pressure in kPa
 #  - platform: template
@@ -90,7 +110,9 @@ sensor:
     humidity: bme280a_humidity
     equation: Wobus   # Wobus (Default), optional Tetens or Buck
     icon: mdi:water-percent
-    web_server_sorting_weight: 6
+    web_server:
+      sorting_group_id: group_environmental_sensors
+      sorting_weight: 3
    
    # BME280 Sensor in I2C Port - Dew Point
   - platform: template
@@ -102,7 +124,10 @@ sensor:
       return (243.5*(log(id(bme280a_humidity).state/100)+((17.67*id(bme280a_temperature).state)/
       (243.5+id(bme280a_temperature).state)))/(17.67-log(id(bme280a_humidity).state/100)-
       ((17.67*id(bme280a_temperature).state)/(243.5+id(bme280a_temperature).state))));
-    web_server_sorting_weight: 7
+    web_server:
+      sorting_group_id: group_environmental_sensors
+      sorting_weight: 4
+
 
    # BME280 Sensor in I2C Port - Equivalent Sea Level Pressure 
    # Note: This is based on 655m for Goulburn North, NSW. Australia. Update for a different location.
@@ -119,7 +144,9 @@ sensor:
 #        (id(bme280a_temperature).state + (0.0065 * STANDARD_ALTITUDE) + 273.15)), 5.257); // in hPa
     update_interval: 15s
     icon: mdi:gauge
-    web_server_sorting_weight: 9
+    web_server:
+      sorting_group_id: group_environmental_sensors
+      sorting_weight: 6
 
 
    # Note: Only Altitude OR Equivalent Sea Level Pressure can be run at one time, not both.
