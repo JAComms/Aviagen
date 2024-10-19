@@ -73,7 +73,7 @@ esphome:
   comment: '${device_description}'
   area: "${location}"
   name_add_mac_suffix: true
-  min_version: 2024.6.0
+  min_version: 2024.10.0
   project:
     name: "${project_name}"
     version: "${project_version}"
@@ -147,7 +147,8 @@ binary_sensor:
     id: device_status
     icon: "mdi:check-network-outline"
     entity_category: diagnostic
-    web_server_sorting_weight: 10
+    web_server:
+      sorting_weight: 10
 
 ##########################################################################
 #
@@ -173,19 +174,22 @@ button:
   - platform: restart
     name: 'Restart Device'
     entity_category: config
-    web_server_sorting_weight: 1
+    web_server:
+      sorting_weight: 1
 
   - platform: safe_mode
     name: "Safe Mode"
     internal: false
     entity_category: config
-    web_server_sorting_weight: 2
+    web_server:
+      sorting_weight: 2
 
   - platform: factory_reset
     name: Reset with Default Settings
     id: Reset
     entity_category: config
-    web_server_sorting_weight: 3
+    web_server:
+      sorting_weight: 3
 
 ##########################################################################
 #
@@ -200,7 +204,8 @@ text_sensor:
     id: device_last_restart
     icon: mdi:clock
     entity_category: diagnostic
-    web_server_sorting_weight: 12
+    web_server:
+      sorting_weight: 12
 
    # Creates a sensor of the name of installed project
   - platform: template
@@ -211,7 +216,8 @@ text_sensor:
     lambda: |-
       return {"${project_name}"};
     update_interval: 6h
-    web_server_sorting_weight: 30
+    web_server:
+      sorting_weight: 30
 
    # Creates a sensor of the version of installed project
   - platform: template
@@ -222,7 +228,8 @@ text_sensor:
     lambda: |-
       return {"${project_version}"};
     update_interval: 6h
-    web_server_sorting_weight: 31
+    web_server:
+      sorting_weight: 31
 
   #  Creates a sensor showing the Aviagen Asset Tag ID of the device
   - platform: template
@@ -233,7 +240,8 @@ text_sensor:
     lambda: |-
       return {"${site}"};
     update_interval: 6h
-    web_server_sorting_weight: 40
+    web_server:
+      sorting_weight: 40
 
   #  Creates a sensor showing the Aviagen Asset Tag ID of the device
   - platform: template
@@ -244,7 +252,8 @@ text_sensor:
     lambda: |-
       return {"${asset_id}"};
     update_interval: 6h
-    web_server_sorting_weight: 42
+    web_server:
+      sorting_weight: 42
 
   #  Creates a sensor showing power circuit / phase of the device
   - platform: template
@@ -255,7 +264,8 @@ text_sensor:
     lambda: |-
       return {"${power_circuit}"};
     update_interval: 6h
-    web_server_sorting_weight: 43
+    web_server:
+      sorting_weight: 43
     
    # Creates a sensor of the uptime of the device, in formatted days, hours, minutes and seconds
    # from : https://community.home-assistant.io/t/uptime-sensor-in-hours-or-days/116392/29
@@ -282,7 +292,8 @@ text_sensor:
       } else {
         return { (String(seconds) +"s").c_str() };
       }
-    web_server_sorting_weight: 11
+    web_server:
+      sorting_weight: 11
 
 ##########################################################################
 #
@@ -313,3 +324,5 @@ time:
               - text_sensor.template.publish:
                   id: device_last_restart
                   state: !lambda 'return id(sntp_time).now().strftime("%a %d %b %Y - %I:%M:%S %p");'
+
+################################# EoF ####################################
