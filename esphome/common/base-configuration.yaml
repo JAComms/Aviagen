@@ -292,7 +292,7 @@ text_sensor:
         return { (String(seconds) +"s").c_str() };
       }
     update_interval: ${sensor_update_interval}
-   icon: mdi:clock-start
+    icon: mdi:clock-start
     web_server:
       sorting_weight: 11
 
