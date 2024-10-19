@@ -145,8 +145,8 @@ binary_sensor:
   - platform: status
     name: "Device Status"
     id: device_status
-    icon: "mdi:check-network-outline"
     entity_category: diagnostic
+    icon: "mdi:check-network-outline"
     web_server:
       sorting_weight: 10
 
@@ -161,8 +161,8 @@ sensor:
   - platform: uptime
     name: "Uptime Seconds"
     id: uptime_seconds
-#    update_interval: 30s
     entity_category: diagnostic
+    update_interval: 10s
     internal: True
 
 ##########################################################################
@@ -185,7 +185,7 @@ button:
       sorting_weight: 2
 
   - platform: factory_reset
-    name: Reset with Default Settings
+    name: Reset - Factory Default
     id: Reset
     entity_category: config
     web_server:
@@ -272,7 +272,6 @@ text_sensor:
   - platform: template
     name: "Device Uptime"
     entity_category: diagnostic
-    icon: mdi:clock-start
     lambda: |-
       int seconds = (id(uptime_seconds).state);
       int days = seconds / (24 * 3600);
@@ -292,6 +291,8 @@ text_sensor:
       } else {
         return { (String(seconds) +"s").c_str() };
       }
+    update_interval: ${sensor_update_interval}
+   icon: mdi:clock-start
     web_server:
       sorting_weight: 11
 
