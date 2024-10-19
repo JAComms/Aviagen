@@ -1,5 +1,18 @@
 #########################################################################
 #
+# Combined with web_server settings in /common/base-configuration to
+# define a network information group
+#
+
+web_server:
+  version: 3
+  sorting_groups:
+    - id: group_network_info
+      name: "Network Information"
+      sorting_weight: -10
+
+
+###########################################################################
 # Substitutions
 #
 substitutions:
@@ -51,16 +64,19 @@ ethernet:
 
 ##########################################################################
 #
-# Text Sensors - Ethernet Specific
+# Sensors - Ethernet Specific
 #
+
 text_sensor:
-
   - platform: ethernet_info
-
+  
     ip_address:
       name: Device IP
       icon: "mdi:ip-network"
-      web_server_sorting_weight: 48
+#      web_server_sorting_weight: 48
+      web_server:
+        sorting_group_id: group_network_info
+        sorting_weight: 1
 #      address_0:
 #        name: Device IP 0
 #      address_1:
@@ -75,11 +91,17 @@ text_sensor:
     mac_address:
       name: MAC Address
       icon: "mdi:network-pos"
-      web_server_sorting_weight: 49
+      web_server:
+      web_server:
+        sorting_group_id: group_network_info
+        sorting_weight: 2
+#      web_server_sorting_weight: 49
 
     dns_address:
       name: DNS Servers
       icon: "mdi:check-network-outline"
-      web_server_sorting_weight: 50
+      web_server:
+        sorting_group_id: group_network_info
+        sorting_weight: 3
 
 ##########################################################################
