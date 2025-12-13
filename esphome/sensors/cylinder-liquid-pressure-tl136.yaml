@@ -136,10 +136,19 @@ sensor:
     # From https://www.sensorsone.com/measurement-to-linear-0-5v-converter/?iunit=cm&irdg=0.8452500672&ilo=0.469&ihi=4.016666&ounit=V&olo=0&ohi=5
       - delta : 0.001                  # Only send the result if the difference with the last sent result is higher than this
       - offset: ${tank_level_offset}   # Add 0.01847cm to total, to correct to 0L when voltage is 0.469V
+      - filter_out: 0
       - median:                        # TESTING
+          window_size: 39
+          send_every: 39
+          send_first_at: 1
       - exponential_moving_average:    # TESTING
-        alpha: 0.2
-        send_every: 15
+          alpha: 0.2
+          send_every: 15
+      - sliding_window_moving_average: # TESTING
+          window_size: 15
+          send_every: 15
+
+          
     internal: true
 
     # Sensor used to publish the 'Tank Level' sensor, but with the prefixed name of the tank (i.e. Water)
