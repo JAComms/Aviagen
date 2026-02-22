@@ -63,7 +63,6 @@ substitutions:
    # Define logging level: NONE, ERROR, WARN, INFO, DEBUG (Default), VERBOSE, VERY_VERBOSE
   log_level: "INFO"
  
-
 ########################## End of Substitutions #########################
 
 esphome:
@@ -259,24 +258,39 @@ text_sensor:
     name: "Device Uptime"
     entity_category: diagnostic
     lambda: |-
-      int seconds = (id(uptime_seconds).state);
+      int seconds = (int) id(uptime_seconds).state;
       int days = seconds / (24 * 3600);
-      seconds = seconds % (24 * 3600);
+      seconds %= (24 * 3600);
       int hours = seconds / 3600;
-      seconds = seconds % 3600;
-      int minutes = seconds /  60;
-      seconds = seconds % 60;
-      if ( days > 3650 ) {
-        return { "Starting up" };
-      } else if ( days ) {
-        return { (String(days) +"d " + String(hours) +"h " + String(minutes) +"m "+ String(seconds) +"s").c_str() };
-      } else if ( hours ) {
-        return { (String(hours) +"h " + String(minutes) +"m "+ String(seconds) +"s").c_str() };
-      } else if ( minutes ) {
-        return { (String(minutes) +"m "+ String(seconds) +"s").c_str() };
+      seconds %= 3600;
+      int minutes = seconds / 60;
+      seconds %= 60;
+
+      if (days > 3650) {
+        return std::string("Starting up");
+      } else if (days) {
+        return std::string(
+          std::to_string(days) + "d " +
+          std::to_string(hours) + "h " +
+          std::to_string(minutes) + "m " +
+          std::to_string(seconds) + "s"
+        );
+      } else if (hours) {
+        return std::string(
+          std::to_string(hours) + "h " +
+          std::to_string(minutes) + "m " +
+          std::to_string(seconds) + "s"
+        );
+      } else if (minutes) {
+        return std::string(
+          std::to_string(minutes) + "m " +
+          std::to_string(seconds) + "s"
+        );
       } else {
-        return { (String(seconds) +"s").c_str() };
-      }
+        return std::string(
+          std::to_string(seconds) + "s"
+        );
+      } 
     update_interval: ${sensor_update_interval}
     icon: mdi:clock-start
     web_server:
@@ -311,5 +325,8 @@ time:
               - text_sensor.template.publish:
                   id: device_last_restart
                   state: !lambda 'return id(sntp_time).now().strftime("%a %d %b %Y - %I:%M:%S %p");'
+        # Log a message when the time is synchronized
+        - logger.log:
+            format: "SNTP: Synchronized system clock"
 
 ################################# EoF ####################################
