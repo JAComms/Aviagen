@@ -84,43 +84,41 @@ sensor:
     filters:
 #     - multiply: 3.3
     - median: 
-       window_size: 6
-       send_every: 6
-       send_first_at: 6
+        window_size: 6
+        send_every: 6
+        send_first_at: 6
     - calibrate_polynomial:
-       degree: 2
-       datapoints:
+        degree: 2
+        datapoints:
           # Map from SENSOR -> TRUE value
-         - 4.15867 -> 4.01667
-         - 3.75700 -> 3.61500
-         - 3.35533 -> 3.21333
-         - 2.95367 -> 2.81167
-         - 2.55200 -> 2.41000
-         - 2.15033 -> 2.00833
-         - 1.74867 -> 1.60667
-         - 1.34700 -> 1.20500
-         - 0.94533 -> 0.80333
-         - 0.14200 -> 0.00000
-#      - filter_out: 0
-      - median:                        # TESTING
-          window_size: 39
-          send_every: 39
-          send_first_at: 1
-      - exponential_moving_average:    # TESTING
-          alpha: 0.2
-          send_every: 15
-      - sliding_window_moving_average: # TESTING
-          window_size: 15
-          send_every: 15
+          - 4.15867 -> 4.01667
+          - 3.75700 -> 3.61500
+          - 3.35533 -> 3.21333
+          - 2.95367 -> 2.81167
+          - 2.55200 -> 2.41000
+          - 2.15033 -> 2.00833
+          - 1.74867 -> 1.60667
+          - 1.34700 -> 1.20500
+          - 0.94533 -> 0.80333
+          - 0.14200 -> 0.00000
+#     - filter_out: 0
+    - median:                        # FIXED: Aligned correctly
+        window_size: 39
+        send_every: 39
+        send_first_at: 1
+    - exponential_moving_average:    # FIXED: Aligned correctly
+        alpha: 0.2
+        send_every: 15
+    - sliding_window_moving_average: # FIXED: Aligned correctly
+        window_size: 15
+        send_every: 15
     internal: false
     entity_category: diagnostic
 
 ################################################################################
 #
 # Water Tank - Conversions and metrics from pressure sensor
-# NOTE: You MUST update the calibrate_linear recorded Voltage to Levels in the Tank.
-# eg. 4.01667 -> 241.0 being 4.01667V is the voltage when the tank is at 241.0cm (100%)
-#     then do the same for each 10% down to 0.0000V = 0cm / 0%
+# NOTE: Fixed the inversion below so higher voltage = higher water level.
 
   - platform: template
     name: "Tank - Level"
@@ -129,25 +127,25 @@ sensor:
     unit_of_measurement: 'cm'
     lambda: |-
         return id(tank_voltage).state;
-    update_interval: 1s #the delta filter will ensure it only sends values when something changes. 
+    update_interval: 1s 
     filters:
       - calibrate_linear:
-          # Measured value of X volt maps to Y cm. 241.0 (and preceding numbers) are based upon a inlet height of 241cm. i.e. 120.5 = 50% of that etc
-          - 4.01667 -> 0.00     #   0%
-          - 3.61500 -> 24.1     #  10%
-          - 3.21333 -> 48.2     #  20%
-          - 2.81167 -> 72.3     #  30%
-          - 2.41000 -> 96.4     #  40%
+          # FIXED: Swapped map order so 0V = 0cm and 4V = 241cm
+          - 0.00000 -> 0.00     #   0%
+          - 0.40167 -> 24.1     #  10%
+          - 0.80333 -> 48.2     #  20%
+          - 1.20500 -> 72.3     #  30%
+          - 1.60667 -> 96.4     #  40%
           - 2.00833 -> 120.5    #  50%
-          - 1.60667 -> 144.6    #  60%
-          - 1.20500 -> 168.7    #  70%
-          - 0.80333 -> 192.8    #  80%
-          - 0.40167 -> 216.9    #  90%
-          - 0.00000 -> 241.0    # 100%
-    # From https://www.sensorsone.com/measurement-to-linear-0-5v-converter/?iunit=cm&irdg=0.8452500672&ilo=0.469&ihi=4.016666&ounit=V&olo=0&ohi=5
-      - delta : 0.001                  # Only send the result if the difference with the last sent result is higher than this
-      - offset: ${tank_level_offset}   # Add 0.01847cm to total, to correct to 0L when voltage is 0.469V
+          - 2.41000 -> 144.6    #  60%
+          - 2.81167 -> 168.7    #  70%
+          - 3.21333 -> 192.8    #  80%
+          - 3.61500 -> 216.9    #  90%
+          - 4.01667 -> 241.0    # 100%
+      - delta: 0.001                  
+      - offset: ${tank_level_offset}   
     internal: true
+
 
     # Sensor used to publish the 'Tank Level' sensor, but with the prefixed name of the tank (i.e. Water)
   - platform: template
