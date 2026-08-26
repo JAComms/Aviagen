@@ -72,7 +72,7 @@ esphome:
   comment: '${device_description}'
   area: "${location}"
   name_add_mac_suffix: true
-  min_version: 2025.2.2
+  min_version: 2025.9.3
   project:
     name: "${project_name}"
     version: "${project_version}"
@@ -183,6 +183,19 @@ button:
 
 text_sensor:
 
+   # Creates a sensor of the uptime of the device, in formatted days, hours, minutes and seconds
+   # WAS from : https://community.home-assistant.io/t/uptime-sensor-in-hours-or-days/116392/29
+  - platform: uptime
+    name: "Device Uptime"
+    id: device_uptime
+    icon: mdi:clock-start
+    entity_category: diagnostic
+    update_interval: ${sensor_update_interval}
+    format:
+      separator: " "
+    web_server:
+      sorting_weight: 11
+
    # Creates a sensor showing when the device was last restarted
   - platform: template
     name: 'Device Last Restart'
@@ -251,50 +264,6 @@ text_sensor:
     update_interval: 6h
     web_server:
       sorting_weight: 43
-    
-   # Creates a sensor of the uptime of the device, in formatted days, hours, minutes and seconds
-   # from : https://community.home-assistant.io/t/uptime-sensor-in-hours-or-days/116392/29
-  - platform: template
-    name: "Device Uptime"
-    entity_category: diagnostic
-    lambda: |-
-      int seconds = (int) id(uptime_seconds).state;
-      int days = seconds / (24 * 3600);
-      seconds %= (24 * 3600);
-      int hours = seconds / 3600;
-      seconds %= 3600;
-      int minutes = seconds / 60;
-      seconds %= 60;
-
-      if (days > 3650) {
-        return std::string("Starting up");
-      } else if (days) {
-        return std::string(
-          std::to_string(days) + "d " +
-          std::to_string(hours) + "h " +
-          std::to_string(minutes) + "m " +
-          std::to_string(seconds) + "s"
-        );
-      } else if (hours) {
-        return std::string(
-          std::to_string(hours) + "h " +
-          std::to_string(minutes) + "m " +
-          std::to_string(seconds) + "s"
-        );
-      } else if (minutes) {
-        return std::string(
-          std::to_string(minutes) + "m " +
-          std::to_string(seconds) + "s"
-        );
-      } else {
-        return std::string(
-          std::to_string(seconds) + "s"
-        );
-      } 
-    update_interval: ${sensor_update_interval}
-    icon: mdi:clock-start
-    web_server:
-      sorting_weight: 11
 
 ##########################################################################
 #
